@@ -18,11 +18,6 @@ class IntendedAudioRecorderStopTests: XCTestCase {
   func testSpec() {
     describe("IntendedAudioRecorder") {
       
-      func startAndStop(intendedRecorder: IntendedAudioRecorder) {
-        intendedRecorder.start(closure: {_ in })
-        intendedRecorder.end(closure: {_,_  in })
-      }
-      
       when("initialized with an audio recorder") {
         and("an amplitude tracker") {
           
@@ -43,15 +38,24 @@ class IntendedAudioRecorderStopTests: XCTestCase {
           describe("#end") {
             
             var stopResult: Bool?
-            //            var audio: Any?
-            
+            var audioData: AudioTimeData?
+            var stopClosureCallCount = 0
+            func endRecorder() {
+              stopClosureCallCount = 0
+              intendedRecorder.end() { flag, result in
+                stopResult = flag
+                stopClosureCallCount += 1
+                audioData = result
+              }
+            }
+            func startAndStopRecorder() {
+              intendedRecorder.start(closure: {_ in })
+              endRecorder()
+            }
             
             context("when not currently recording") {
               beforeEach {
-                intendedRecorder.end() { flag, _ in
-                  stopResult = flag
-                  //                  audio = result
-                }
+                endRecorder()
               }
               
               it("should un succefull complete") {
@@ -64,17 +68,15 @@ class IntendedAudioRecorderStopTests: XCTestCase {
               it("should not call stop on audio recorder") {
                 expect(recordable.stopped).to.equal(0, "stop was called when it shouldn't have been")
               }
+              
+              it("should only call the end closure once") {
+                expect(stopClosureCallCount).to.equal(1, "end closure called too many times \(stopClosureCallCount)")
+              }
             }
-            
-            
             
             context("when currently recording") {
               beforeEach {
-                intendedRecorder.start(closure: {_ in })
-                intendedRecorder.end() { flag, _ in
-                  stopResult = flag
-                  //                  audio = result
-                }
+                startAndStopRecorder()
               }
               
               it("should stop recording") {
@@ -91,7 +93,7 @@ class IntendedAudioRecorderStopTests: XCTestCase {
                 
                 func assertProcessingSamples(_ samples: [AudioSample]) {
                   intendedRecorder.samples = samples
-                  startAndStop(intendedRecorder: intendedRecorder)
+                  startAndStopRecorder()
                   expect(intendedRecorder.samples.count).to.equal(processor.samples.count)
                 }
                 
@@ -102,7 +104,28 @@ class IntendedAudioRecorderStopTests: XCTestCase {
               }
               
               it("should return the processed audio") {
+                let processor = MockAudioProcessor()
+                intendedRecorder.processor = processor
                 
+                func assertRecorderReturnsProcessorTimeData() {
+                  startAndStopRecorder()
+                  expect(audioData == nil).to.be.false("audio data is nil")
+                  expect(audioData!).to.equal(processor.audioTimeData)
+                }
+                assertRecorderReturnsProcessorTimeData()
+                
+                processor.audioTimeData = AudioTimeData(startTime: 1, endTime: 0)
+                assertRecorderReturnsProcessorTimeData()
+                
+                processor.audioTimeData = AudioTimeData(startTime: 0, endTime: 1)
+                assertRecorderReturnsProcessorTimeData()
+                
+                processor.audioTimeData = AudioTimeData(startTime: 42.77, endTime: 987.456)
+                assertRecorderReturnsProcessorTimeData()
+              }
+              
+              it("should only call the end closure once") {
+                expect(stopClosureCallCount).to.equal(1, "end closure called too many times \(stopClosureCallCount)")
               }
             }
           }

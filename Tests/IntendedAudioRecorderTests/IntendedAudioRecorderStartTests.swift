@@ -68,18 +68,18 @@ class IntendedAudioRecorderStartTests: XCTestCase {
             }
             
             it("should have an empty samples array") {
-              expect(intendedRecorder.samples.count).to.equal(0)
+              expect(intendedRecorder.samples.count).to.equal(1)
             }
             
             it("should track the audio samples") {
               timer.timerBlock()
-              expect(intendedRecorder.samples.count).to.equal(1)
-              timer.timerBlock()
               expect(intendedRecorder.samples.count).to.equal(2)
               timer.timerBlock()
+              expect(intendedRecorder.samples.count).to.equal(3)
               timer.timerBlock()
               timer.timerBlock()
-              expect(intendedRecorder.samples.count).to.equal(5)
+              timer.timerBlock()
+              expect(intendedRecorder.samples.count).to.equal(6)
             }
             
             

@@ -16,6 +16,5 @@ struct AmplitudeIntendedAudioProcessor: AmplitudeIntendedAudioProcessorType {
     let data = try processor.processBasedOnAmplitude()
     return data
   }
-  
-  
+
 }
