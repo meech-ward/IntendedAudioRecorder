@@ -30,4 +30,22 @@ class IntendedAudioRecorder {
     }
   }
   
+  func delete(closure: @escaping ((Bool) -> ())) {
+    guard recorder.isRecording else  {
+      closure(false)
+      return
+    }
+    
+    recorder.stop() { flag in
+      
+      guard flag == true else {
+        closure(false)
+        return
+      }
+      
+      self.recorder.delete { flag in
+        closure(flag)
+      }
+    }
+  }
 }
