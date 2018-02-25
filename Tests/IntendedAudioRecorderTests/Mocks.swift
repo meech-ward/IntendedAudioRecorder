@@ -47,7 +47,7 @@ class MockRecordable: AudioRecordable {
 }
 
 class MockAmplitudeTracker: AudioAmplitudeTrackerType {
-  var amplitude: Double?
+  var amplitude: Double? = 0
   
   var rightAmplitude: Double?
   

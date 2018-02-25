@@ -6,7 +6,7 @@ import CleanReporter
 @testable import IntendedAudioRecorder
 import AudioIO
 
-class IntendedAudioRecorderTests: XCTestCase {
+class IntendedAudioRecorderStopTests: XCTestCase {
   
   override class func setUp() {
     let reporter = Reporter.sharedInstance
@@ -38,68 +38,19 @@ class IntendedAudioRecorderTests: XCTestCase {
             intendedRecorder = IntendedAudioRecorder(recordable: recordable, amplitudeTracker: amplitudeTracker, timer: timer)
           }
           
-          it("should have the AmplitudeIntendedAudioProcessor set as its processor") {
-            guard ((intendedRecorder.processor as? AmplitudeIntendedAudioProcessor) != nil) else {
-              return expect(0).to.fail("recorder has the wrong processor")
-            }
-            
-            expect(0).to.pass()
-          }
           
-          it("should have an empty samples array") {
-            expect(intendedRecorder.samples.count).to.equal(0)
-          }
-          
-          describe("#start") {
-            
-            var startResult: Bool?
-            beforeEach {
-              intendedRecorder.start() { flag in
-                startResult = flag
-              }
-            }
-            
-            it("should start recording") {
-              guard let startResult = startResult else {
-                return expect(0).to.fail("startResult is nil")
-              }
-              expect(recordable.started).to.equal(1)
-              expect(startResult).to.equal(true)
-            }
-            
-            it("should have an empty samples array") {
-              expect(intendedRecorder.samples.count).to.equal(0)
-            }
-            
-            it("should track the audio samples") {
-              
-            }
-            
-            
-            context("when currently recording") {
-              it("should stop recording") {
-                
-              }
-              it("should delete the current recording") {
-                
-              }
-              it("should start recording") {
-                
-              }
-            }
-          }
           
           describe("#end") {
             
             var stopResult: Bool?
-//            var audio: Any?
+            //            var audio: Any?
             
             
             context("when not currently recording") {
               beforeEach {
                 intendedRecorder.end() { flag, _ in
                   stopResult = flag
-//                  audio = result
+                  //                  audio = result
                 }
               }
               
@@ -122,7 +73,7 @@ class IntendedAudioRecorderTests: XCTestCase {
                 intendedRecorder.start(closure: {_ in })
                 intendedRecorder.end() { flag, _ in
                   stopResult = flag
-//                  audio = result
+                  //                  audio = result
                 }
               }
               
@@ -155,26 +106,6 @@ class IntendedAudioRecorderTests: XCTestCase {
               }
             }
           }
-          
-          describe("#delete") {
-            it("should do nothing") {
-              
-            }
-            context("when currently recording") {
-              it("should stop recording") {
-                
-              }
-              it("should delete the current recording") {
-                
-              }
-            }
-            
-            context("when stopped recording") {
-              it("should delete the current recording") {
-                
-              }
-            }
-          }
         }
       }
     }
@@ -185,3 +116,4 @@ class IntendedAudioRecorderTests: XCTestCase {
     ("testSpec", testSpec),
     ]
 }
+
