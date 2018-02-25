@@ -1,0 +1,52 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "AudioIO",
+        "repositoryURL": "/Users/Sam/Library/Mobile Documents/com~apple~CloudDocs/Projects/Sam/RecordPiano/Entities/AudioIO",
+        "state": {
+          "branch": null,
+          "revision": "240d4f8fc89799ba3943d774ef1efbebc3f259ab",
+          "version": "0.2.2"
+        }
+      },
+      {
+        "package": "AudioProcessor",
+        "repositoryURL": "/Users/Sam/Library/Mobile Documents/com~apple~CloudDocs/Projects/Sam/RecordPiano/Entities/AudioProcessor",
+        "state": {
+          "branch": null,
+          "revision": "cc26d63930842cc2e6d043b1d6bd353b16984781",
+          "version": "0.3.1"
+        }
+      },
+      {
+        "package": "CleanReporter",
+        "repositoryURL": "https://github.com/meech-ward/ObserveFocusCleanReporter",
+        "state": {
+          "branch": null,
+          "revision": "f50ae2597ec0896be302ce22f7e0fd0ae524de0a",
+          "version": "0.1.2"
+        }
+      },
+      {
+        "package": "Focus",
+        "repositoryURL": "https://github.com/meech-ward/Focus",
+        "state": {
+          "branch": null,
+          "revision": "6a46338fb6fdd23f860d901f0b899546100598ce",
+          "version": "0.6.2"
+        }
+      },
+      {
+        "package": "Observe",
+        "repositoryURL": "https://github.com/meech-ward/Observe",
+        "state": {
+          "branch": null,
+          "revision": "e72a626769db357e0052bb019df65bcd0d1beba7",
+          "version": "0.5.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
