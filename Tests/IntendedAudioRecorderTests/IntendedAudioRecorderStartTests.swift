@@ -84,15 +84,30 @@ class IntendedAudioRecorderStartTests: XCTestCase {
             
             
             context("when currently recording") {
-              it("should stop recording") {
+              beforeEach {
+                startResult = nil
+                recordable.started = 0
+                intendedRecorder.start() { flag in
+                  startResult = flag
+                }
                 
               }
-              it("should delete the current recording") {
-                
+              it("should un succefull complete") {
+                guard let startResult = startResult else {
+                  return expect(0).to.fail("stopResult is nil")
+                }
+                expect(startResult).to.equal(false)
+                expect(recordable.started).to.equal(0, "shouldn't have been deleted")
               }
-              it("should start recording") {
-                
-              }
+//              it("should stop recording") {
+//                
+//              }
+//              it("should delete the current recording") {
+//                
+//              }
+//              it("should start recording") {
+//                
+//              }
             }
           }
         }

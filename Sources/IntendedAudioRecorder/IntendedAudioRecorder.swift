@@ -14,6 +14,11 @@ class IntendedAudioRecorder {
   }
   
   func start(closure: @escaping ((Bool) -> ())) {
+    guard recorder.isRecording == false else  {
+      closure(false)
+      return
+    }
+    
     samples = [AudioSample]()
     recorder.start(closure: closure)
   }

@@ -23,10 +23,11 @@ class MockTimer: TimerType {
 
 class MockRecordable: AudioRecordable {
   var started = 0
+  var startClosureFlag = true
   func start(closure: @escaping ((Bool) -> ())) {
     started += 1
     isRecording = true
-    closure(true)
+    closure(startClosureFlag)
   }
   var stopped = 0
   var stopClosureFlag = true
