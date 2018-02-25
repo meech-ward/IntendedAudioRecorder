@@ -15,7 +15,7 @@ let package = Package(
       .package(url: "https://github.com/meech-ward/ObserveFocusCleanReporter", from: "0.1.2"),
       .package(url: "https://github.com/meech-ward/Observe", from: "0.5.1"),
       .package(url: "https://github.com/meech-ward/Focus", from: "0.6.2"),
-      .package(url: "../../Entities/AudioIO", from: "0.2.2"),
+      .package(url: "../../Entities/AudioIO", .branch("develop")),
       .package(url: "../../Entities/AudioProcessor", from: "0.3.1")
     ],
     targets: [

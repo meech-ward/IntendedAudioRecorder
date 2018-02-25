@@ -5,9 +5,9 @@
         "package": "AudioIO",
         "repositoryURL": "/Users/Sam/Library/Mobile Documents/com~apple~CloudDocs/Projects/Sam/RecordPiano/Entities/AudioIO",
         "state": {
-          "branch": null,
-          "revision": "240d4f8fc89799ba3943d774ef1efbebc3f259ab",
-          "version": "0.2.2"
+          "branch": "develop",
+          "revision": "bd56076d075bb76bfbdff98bb8a514e2db4446c7",
+          "version": null
         }
       },
       {
