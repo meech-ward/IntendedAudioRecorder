@@ -8,6 +8,7 @@
 import Foundation
 @testable import IntendedAudioRecorder
 import AudioIO
+import AudioProcessor
 
 class MockTimer: TimerType {
   var timerBlock: () -> (Void) = {}
@@ -51,4 +52,12 @@ class MockAmplitudeTracker: AudioAmplitudeTrackerType {
   var rightAmplitude: Double?
   
   var leftAmplitude: Double?
+}
+
+class MockAudioProcessor: AmplitudeIntendedAudioProcessorType {
+  func processIntendedAudioBasedOnAmplitude(samples: [AudioSample]) throws -> AudioTimeData {
+    
+  }
+  
+  
 }

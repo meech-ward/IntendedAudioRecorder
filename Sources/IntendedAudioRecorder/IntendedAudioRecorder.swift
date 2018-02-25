@@ -3,6 +3,7 @@ import AudioIO
 struct IntendedAudioRecorder {
   
   let recorder: AudioRecorder
+  var processor: AmplitudeIntendedAudioProcessorType?
   
   init(recordable: AudioRecordable, amplitudeTracker: AudioAmplitudeTrackerType, timer: TimerType
     ) {
@@ -18,7 +19,7 @@ struct IntendedAudioRecorder {
   }
   
   func end(closure: @escaping ((Bool, Any?) -> ())) {
-    guard recorder.isRecording else {
+    guard recorder.isRecording else  {
       closure(false, nil)
       return
     }

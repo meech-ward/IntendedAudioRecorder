@@ -17,10 +17,13 @@ class IntendedAudioRecorderTests: XCTestCase {
   
   func testSpec() {
     describe("IntendedAudioRecorder") {
+      
+      
+      
       when("initialized with an audio recorder") {
         and("an amplitude tracker") {
           
-          var indendedRecorder: IntendedAudioRecorder!
+          var intendedRecorder: IntendedAudioRecorder!
           var amplitudeTracker: MockAmplitudeTracker!
           var recordable: MockRecordable!
           var timer: MockTimer!
@@ -29,14 +32,22 @@ class IntendedAudioRecorderTests: XCTestCase {
             recordable = MockRecordable()
             timer = MockTimer()
             amplitudeTracker = MockAmplitudeTracker()
-            indendedRecorder = IntendedAudioRecorder(recordable: recordable, amplitudeTracker: amplitudeTracker, timer: timer)
+            intendedRecorder = IntendedAudioRecorder(recordable: recordable, amplitudeTracker: amplitudeTracker, timer: timer)
+          }
+          
+          it("should have the AmplitudeIntendedAudioProcessor set as its processor") {
+            guard _ = intendedRecorder.processor as? AmplitudeIntendedAudioProcessor else {
+              return expect(0).to.fail("recorder has the wrong processor")
+            }
+            
+            expect(0).to.pass()
           }
           
           describe("#start") {
             
             var startResult: Bool?
             beforeEach {
-              indendedRecorder.start() { flag in
+              intendedRecorder.start() { flag in
                 startResult = flag
               }
             }
@@ -47,6 +58,10 @@ class IntendedAudioRecorderTests: XCTestCase {
               }
               expect(recordable.started).to.equal(1)
               expect(startResult).to.equal(true)
+            }
+            
+            it("should track the audio samples") {
+              
             }
             
             
@@ -71,7 +86,7 @@ class IntendedAudioRecorderTests: XCTestCase {
             
             context("when not currently recording") {
               beforeEach {
-                indendedRecorder.end() { flag, _ in
+                intendedRecorder.end() { flag, _ in
                   stopResult = flag
 //                  audio = result
                 }
@@ -93,8 +108,8 @@ class IntendedAudioRecorderTests: XCTestCase {
             
             context("when currently recording") {
               beforeEach {
-                indendedRecorder.start(closure: {_ in })
-                indendedRecorder.end() { flag, _ in
+                intendedRecorder.start(closure: {_ in })
+                intendedRecorder.end() { flag, _ in
                   stopResult = flag
 //                  audio = result
                 }
@@ -107,9 +122,11 @@ class IntendedAudioRecorderTests: XCTestCase {
                 expect(recordable.stopped).to.equal(1)
                 expect(stopResult).to.equal(true)
               }
-              it("should process the audio") {
+              
+              it("should process the audio with the collected samples") {
                 
               }
+              
               it("should return the processed audio") {
                 
               }
