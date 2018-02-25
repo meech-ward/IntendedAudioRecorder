@@ -57,10 +57,21 @@ class MockAmplitudeTracker: AudioAmplitudeTrackerType {
   var leftAmplitude: Double?
 }
 
+enum MockError: Error {
+  case error
+}
+
 class MockAudioProcessor: AmplitudeIntendedAudioProcessorType {
   var samples = [AudioSample]()
   var audioTimeData = AudioTimeData(startTime: 0, endTime: 0)
+  
+  var willThrow = false
+  
+  
   func processIntendedAudioBasedOnAmplitude(samples: [AudioSample]) throws -> AudioTimeData {
+    if willThrow {
+      throw MockError.error
+    }
     self.samples = samples
     return audioTimeData
   }

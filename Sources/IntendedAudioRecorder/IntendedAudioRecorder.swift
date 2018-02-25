@@ -1,19 +1,19 @@
 import AudioIO
 
-class IntendedAudioRecorder {
+public class IntendedAudioRecorder {
   
-  var recorder: AudioRecorder!
-  var processor: AmplitudeIntendedAudioProcessorType = AmplitudeIntendedAudioProcessor()
-  var samples = [AudioSample]()
+  public var recorder: AudioRecorder!
+  public var processor: AmplitudeIntendedAudioProcessorType = AmplitudeIntendedAudioProcessor()
+  public var samples = [AudioSample]()
   
-  init(recordable: AudioRecordable, amplitudeTracker: AudioAmplitudeTrackerType, timer: TimerType
+  public init(recordable: AudioRecordable, amplitudeTracker: AudioAmplitudeTrackerType, timer: TimerType
     ) {
     self.recorder = AudioRecorder(recordable: recordable, powerTracker: nil, frequencyTracker: nil, amplitudeTracker: amplitudeTracker, dataTimer: timer, dataClosure: { sample, recordable in
       self.samples.append(sample)
     })
   }
   
-  func start(closure: @escaping ((Bool) -> ())) {
+  public func start(closure: @escaping ((Bool) -> ())) {
     guard recorder.isRecording == false else  {
       closure(false)
       return
@@ -23,19 +23,24 @@ class IntendedAudioRecorder {
     recorder.start(closure: closure)
   }
   
-  func end(closure: @escaping ((Bool, AudioTimeData?) -> ())) {
+  public func end(closure: @escaping ((Bool, ProcessedAudio?) -> ())) {
     guard recorder.isRecording else  {
       closure(false, nil)
       return
     }
     
     recorder.stop() { flag in
-      let audioTimeData = try? self.processor.processIntendedAudioBasedOnAmplitude(samples: self.samples)
-      closure(flag, audioTimeData)
+      do {
+        let audioTimeData = try self.processor.processIntendedAudioBasedOnAmplitude(samples: self.samples)
+        let processedAudio = ProcessedAudio(samples: self.samples, intendedTimeData: audioTimeData)
+        closure(flag, processedAudio)
+      } catch {
+        closure(false, nil)
+      }
     }
   }
   
-  func delete(closure: @escaping ((Bool) -> ())) {
+  public func delete(closure: @escaping ((Bool) -> ())) {
     guard recorder.isRecording else  {
       closure(false)
       return

@@ -38,14 +38,14 @@ class IntendedAudioRecorderStopTests: XCTestCase {
           describe("#end") {
             
             var stopResult: Bool?
-            var audioData: AudioTimeData?
+            var processedAudio: ProcessedAudio?
             var stopClosureCallCount = 0
             func endRecorder() {
               stopClosureCallCount = 0
               intendedRecorder.end() { flag, result in
                 stopResult = flag
                 stopClosureCallCount += 1
-                audioData = result
+                processedAudio = result
               }
             }
             func startAndStopRecorder() {
@@ -103,14 +103,27 @@ class IntendedAudioRecorderStopTests: XCTestCase {
                 assertProcessingSamples([AudioSample(time: 0), AudioSample(time: 0), AudioSample(time: 0), AudioSample(time: 0)])
               }
               
+              it("should return the intended recorders samples in the completion") {
+                func assertReturnedSamples(_ samples: [AudioSample]) {
+                  intendedRecorder.samples = samples
+                  startAndStopRecorder()
+                  expect(intendedRecorder.samples.count).to.equal(processedAudio!.samples.count)
+                }
+                
+                assertReturnedSamples([])
+                assertReturnedSamples([AudioSample(time: 0)])
+                assertReturnedSamples([AudioSample(time: 0), AudioSample(time: 0)])
+                assertReturnedSamples([AudioSample(time: 0), AudioSample(time: 0), AudioSample(time: 0), AudioSample(time: 0)])
+              }
+              
               it("should return the processed audio") {
                 let processor = MockAudioProcessor()
                 intendedRecorder.processor = processor
                 
                 func assertRecorderReturnsProcessorTimeData() {
                   startAndStopRecorder()
-                  expect(audioData == nil).to.be.false("audio data is nil")
-                  expect(audioData!).to.equal(processor.audioTimeData)
+                  expect(processedAudio == nil).to.be.false("audio data is nil")
+                  expect(processedAudio!.intendedTimeData).to.equal(processor.audioTimeData)
                 }
                 assertRecorderReturnsProcessorTimeData()
                 
@@ -126,6 +139,24 @@ class IntendedAudioRecorderStopTests: XCTestCase {
               
               it("should only call the end closure once") {
                 expect(stopClosureCallCount).to.equal(1, "end closure called too many times \(stopClosureCallCount)")
+              }
+              
+              context("when the processor throws an error") {
+                
+                beforeEach {
+                  let processor = MockAudioProcessor()
+                  processor.willThrow = true
+                  intendedRecorder.processor = processor
+                  startAndStopRecorder()
+                }
+                
+                // This should probably be changed in the future to be way more helpful
+                it("should un succefull complete") {
+                  guard let stopResult = stopResult else {
+                    return expect(0).to.fail("stopResult is nil")
+                  }
+                  expect(stopResult).to.equal(false)
+                }
               }
             }
           }
