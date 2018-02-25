@@ -55,9 +55,9 @@ class MockAmplitudeTracker: AudioAmplitudeTrackerType {
 }
 
 class MockAudioProcessor: AmplitudeIntendedAudioProcessorType {
+  var samples = [AudioSample]()
   func processIntendedAudioBasedOnAmplitude(samples: [AudioSample]) throws -> AudioTimeData {
-    
+    self.samples = samples
+    return AudioTimeData(startTime: 0, endTime: 0)
   }
-  
-  
 }

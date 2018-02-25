@@ -18,7 +18,10 @@ class IntendedAudioRecorderTests: XCTestCase {
   func testSpec() {
     describe("IntendedAudioRecorder") {
       
-      
+      func startAndStop(intendedRecorder: IntendedAudioRecorder) {
+        intendedRecorder.start(closure: {_ in })
+        intendedRecorder.end(closure: {_,_  in })
+      }
       
       when("initialized with an audio recorder") {
         and("an amplitude tracker") {
@@ -36,11 +39,15 @@ class IntendedAudioRecorderTests: XCTestCase {
           }
           
           it("should have the AmplitudeIntendedAudioProcessor set as its processor") {
-            guard _ = intendedRecorder.processor as? AmplitudeIntendedAudioProcessor else {
+            guard ((intendedRecorder.processor as? AmplitudeIntendedAudioProcessor) != nil) else {
               return expect(0).to.fail("recorder has the wrong processor")
             }
             
             expect(0).to.pass()
+          }
+          
+          it("should have an empty samples array") {
+            expect(intendedRecorder.samples.count).to.equal(0)
           }
           
           describe("#start") {
@@ -58,6 +65,10 @@ class IntendedAudioRecorderTests: XCTestCase {
               }
               expect(recordable.started).to.equal(1)
               expect(startResult).to.equal(true)
+            }
+            
+            it("should have an empty samples array") {
+              expect(intendedRecorder.samples.count).to.equal(0)
             }
             
             it("should track the audio samples") {
@@ -124,7 +135,19 @@ class IntendedAudioRecorderTests: XCTestCase {
               }
               
               it("should process the audio with the collected samples") {
+                let processor = MockAudioProcessor()
+                intendedRecorder.processor = processor
                 
+                func assertProcessingSamples(_ samples: [AudioSample]) {
+                  intendedRecorder.samples = samples
+                  startAndStop(intendedRecorder: intendedRecorder)
+                  expect(intendedRecorder.samples.count).to.equal(processor.samples.count)
+                }
+                
+                assertProcessingSamples([])
+                assertProcessingSamples([AudioSample(time: 0)])
+                assertProcessingSamples([AudioSample(time: 0), AudioSample(time: 0)])
+                assertProcessingSamples([AudioSample(time: 0), AudioSample(time: 0), AudioSample(time: 0), AudioSample(time: 0)])
               }
               
               it("should return the processed audio") {

@@ -3,7 +3,8 @@ import AudioIO
 struct IntendedAudioRecorder {
   
   let recorder: AudioRecorder
-  var processor: AmplitudeIntendedAudioProcessorType?
+  var processor: AmplitudeIntendedAudioProcessorType = AmplitudeIntendedAudioProcessor()
+  var samples = [AudioSample]()
   
   init(recordable: AudioRecordable, amplitudeTracker: AudioAmplitudeTrackerType, timer: TimerType
     ) {
@@ -27,6 +28,8 @@ struct IntendedAudioRecorder {
     recorder.stop() { flag in 
       closure(flag, 0)
     }
+    
+    _ = try? processor.processIntendedAudioBasedOnAmplitude(samples: samples)
   }
   
 }
